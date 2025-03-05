@@ -4,6 +4,7 @@ using FShop.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FShop.Data.Migrations
 {
     [DbContext(typeof(FShopDBContext))]
-    partial class FShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250305081548_Identity_DB")]
+    partial class Identity_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -617,15 +620,6 @@ namespace FShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("e99c6b6d-9056-41bd-8a48-971205c57824"),
-                            Description = "Admin Role",
-                            Name = "admin",
-                            NormalizedName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.Transaction", b =>
@@ -738,27 +732,6 @@ namespace FShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3cd4aae4-8648-4cd3-9ca8-ffd93d7a316d"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1acfc960-b236-4ab7-a67c-938aaa41ad7b",
-                            Dob = new DateTime(2002, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "lmht721@gmail.com",
-                            EmailConfirmed = true,
-                            Firstname = "Phúc",
-                            Lastname = "Hồ Văn",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "lmht721@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP0UqkGQWBlR6RbRiMaBTYv79Y1nIG5pvMNjyiidU43uVBfIwq70EzE2Sasrf3wKXw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -838,13 +811,6 @@ namespace FShop.Data.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("UserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("3cd4aae4-8648-4cd3-9ca8-ffd93d7a316d"),
-                            RoleId = new Guid("e99c6b6d-9056-41bd-8a48-971205c57824")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

@@ -1,5 +1,6 @@
 ﻿using FShop.Data.Entities;
 using FShop.Data.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -184,6 +185,40 @@ namespace FShop.Data.Extensions
                     CategoryId = 1
                 }
                 );
+
+            var ADMIN_ID = new Guid("3CD4AAE4-8648-4CD3-9CA8-FFD93D7A316D");
+            var ROLE_ID = new Guid("E99C6B6D-9056-41BD-8A48-971205C57824");
+
+            modelBuilder.Entity<Role>().HasData(new Role
+            {
+                Id = ROLE_ID,
+                Name = "admin",
+                Description = "Admin Role",
+                NormalizedName = "admin"
+            });
+
+            var hasher = new PasswordHasher<User>();
+            var hasherPassword = hasher.HashPassword(null, "@Phuc20ad");
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = ADMIN_ID,
+                UserName = "admin",
+                NormalizedUserName = "admin",
+                Email = "lmht721@gmail.com",
+                NormalizedEmail = "lmht721@gmail.com",
+                EmailConfirmed = true,
+                PasswordHash = hasherPassword,
+                SecurityStamp = string.Empty,
+                Firstname = "Phúc",
+                Lastname = "Hồ Văn",
+                Dob = new DateTime(2002, 08, 28)
+            });
+
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = ROLE_ID,
+                UserId = ADMIN_ID
+            });
         }
     }
 }
