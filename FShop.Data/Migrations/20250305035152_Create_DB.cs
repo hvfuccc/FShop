@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FShop.Data.Migrations
 {
     /// <inheritdoc />
@@ -114,8 +116,7 @@ namespace FShop.Data.Migrations
                     OriginalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ViewCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SeoAlias = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -297,6 +298,74 @@ namespace FShop.Data.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AppConfigs",
+                columns: new[] { "Key", "Value" },
+                values: new object[,]
+                {
+                    { "HomeDescription", "This is description of FShop" },
+                    { "HomeKeyword", "This is keyword of FShop" },
+                    { "HomeTiTle", "This is home page of FShop" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "IsShowOnHome", "ParentId", "SortOrder", "Status" },
+                values: new object[,]
+                {
+                    { 1, true, null, 1, 1 },
+                    { 2, true, null, 2, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Languages",
+                columns: new[] { "Id", "IsDefault", "Name" },
+                values: new object[,]
+                {
+                    { "en-VN", false, "English" },
+                    { "vi-VN", true, "Tiếng Việt" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "OriginalPrice", "Price" },
+                values: new object[,]
+                {
+                    { 1, 1399000000m, 1499000000m },
+                    { 2, 1599000000m, 1699000000m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CategoryTranslations",
+                columns: new[] { "Id", "CategoryId", "LanguageId", "Name", "SeoAlias", "SeoDescription", "SeoTitle" },
+                values: new object[,]
+                {
+                    { 1, 1, "vi-VN", "Ô tô", "o-to", "Ô tô Vinfast", "Ô tô Vinfast" },
+                    { 2, 1, "en-VN", "Car", "car", "Vinfast Car", "Vinfast Car" },
+                    { 3, 2, "vi-VN", "Xe máy điện", "xe-may-dien", "Xe máy điện Vinfast", "Xe máy điện Vinfast" },
+                    { 4, 2, "en-VN", "E-Scooters", "e-scooters", "Vinfast E-Scooters", "Vinfast E-Scooters" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductCategories",
+                columns: new[] { "CategoryId", "ProductId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductTranslations",
+                columns: new[] { "Id", "Description", "Details", "LanguageId", "Name", "ProductId", "SeoAlias", "SeoDescription", "SeoTitle" },
+                values: new object[,]
+                {
+                    { 1, "Nâng tầm thời thượng", "Mạnh mẽ, bề thế", "vi-VN", "VF 9 Eco", 1, "vf-9-eco", "VF 9 là mẫu xe SUV 7 chỗ hàng đầu của VinFast. Với kiểu dáng tinh tế, công nghệ tiên tiến nhất và sự tỉ mỉ trong từng chi tiết, VF 9 mang đến trải nghiệm đặc biệt cao cấp cho Người sở hữu.", "Hạng sang" },
+                    { 2, "Level Uptrendy", "Strong, imposing", "en-VN", "VF 9 Eco", 1, "vf-9-eco", "VF 9 is VinFast's leading 7-seat SUV. With sophisticated design, the most advanced technology and meticulous attention to detail, VF 9 offers experience especially premium for Owners.", "Luxury" },
+                    { 3, "Nâng tầm thời thượng", "Mạnh mẽ, bề thế", "vi-VN", "VF 9 Plus", 2, "vf-9-plus", "VF 9 là mẫu xe SUV 7 chỗ hàng đầu của VinFast. Với kiểu dáng tinh tế, công nghệ tiên tiến nhất và sự tỉ mỉ trong từng chi tiết, VF 9 mang đến trải nghiệm đặc biệt cao cấp cho Người sở hữu.", "Hạng sang" },
+                    { 4, "Level Uptrendy", "Strong, imposing", "en-VN", "VF 9 Plus", 2, "vf-9-plus", "VF 9 is VinFast's leading 7-seat SUV. With sophisticated design, the most advanced technology and meticulous attention to detail, VF 9 offers experience especially premium for Owners.", "Luxury" }
                 });
 
             migrationBuilder.CreateIndex(
