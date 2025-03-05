@@ -14,5 +14,6 @@ namespace FShop.Data.Entities
         public Guid UserId { get; set; }
         public DateTime DateCreated { get; set; }
         public ICollection<ProductCart> ProductCarts { get; set; }
+        public User User { get; set; }
     }
 }

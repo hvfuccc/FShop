@@ -10,6 +10,7 @@ namespace FShop.Data.Entities
     public class Transaction
     {
         public int Id { get; set; }
+        public Guid UserId { get; set; }
         public DateTime TransactionDate { get; set; }
         public string ExternalTransactionId { get; set; }
         public decimal Amount { get; set; }
@@ -18,5 +19,6 @@ namespace FShop.Data.Entities
         public string Message { get; set; }
         public TransactionStatus Status { get; set; }
         public string Provider { get; set; }
+        public User User { get; set; }
     }
 }

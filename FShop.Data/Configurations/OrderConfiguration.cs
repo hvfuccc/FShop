@@ -21,6 +21,7 @@ namespace FShop.Data.Configurations
             builder.Property(x => x.ShipAddress).IsRequired().HasColumnType("nvarchar(MAX)");
             builder.Property(x => x.ShipEmail).IsRequired().HasMaxLength(100).IsUnicode(false);
             builder.Property(x => x.ShipPhoneNumber).IsRequired().HasMaxLength(15).IsUnicode(false);
+            builder.HasOne(x => x.User).WithMany(x => x.Orders).HasForeignKey(x => x.UserId);
         }
     }
 }
