@@ -1,5 +1,6 @@
 ﻿using FShop.Data.Configurations;
 using FShop.Data.Entities;
+using FShop.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,9 @@ namespace FShop.Data.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /*
+             Configuration using Fluent API
+            */
             modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
@@ -35,6 +39,11 @@ namespace FShop.Data.EntityFramework
             modelBuilder.ApplyConfiguration(new CategoryTranslationConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
+            /*
+             Data Seeding
+            */
+            modelBuilder.Seed();
             //base.OnModelCreating(modelBuilder);
         }
 

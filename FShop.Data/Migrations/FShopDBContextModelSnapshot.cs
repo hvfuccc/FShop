@@ -35,6 +35,23 @@ namespace FShop.Data.Migrations
                     b.HasKey("Key");
 
                     b.ToTable("AppConfigs", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Key = "HomeTiTle",
+                            Value = "This is home page of FShop"
+                        },
+                        new
+                        {
+                            Key = "HomeKeyword",
+                            Value = "This is keyword of FShop"
+                        },
+                        new
+                        {
+                            Key = "HomeDescription",
+                            Value = "This is description of FShop"
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.Cart", b =>
@@ -87,6 +104,22 @@ namespace FShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsShowOnHome = true,
+                            SortOrder = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsShowOnHome = true,
+                            SortOrder = 2,
+                            Status = 1
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.CategoryTranslation", b =>
@@ -133,6 +166,48 @@ namespace FShop.Data.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("CategoryTranslations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            LanguageId = "vi-VN",
+                            Name = "Ô tô",
+                            SeoAlias = "o-to",
+                            SeoDescription = "Ô tô Vinfast",
+                            SeoTitle = "Ô tô Vinfast"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            LanguageId = "en-VN",
+                            Name = "Car",
+                            SeoAlias = "car",
+                            SeoDescription = "Vinfast Car",
+                            SeoTitle = "Vinfast Car"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            LanguageId = "vi-VN",
+                            Name = "Xe máy điện",
+                            SeoAlias = "xe-may-dien",
+                            SeoDescription = "Xe máy điện Vinfast",
+                            SeoTitle = "Xe máy điện Vinfast"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 2,
+                            LanguageId = "en-VN",
+                            Name = "E-Scooters",
+                            SeoAlias = "e-scooters",
+                            SeoDescription = "Vinfast E-Scooters",
+                            SeoTitle = "Vinfast E-Scooters"
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.Contact", b =>
@@ -190,6 +265,20 @@ namespace FShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Languages", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "vi-VN",
+                            IsDefault = true,
+                            Name = "Tiếng Việt"
+                        },
+                        new
+                        {
+                            Id = "en-VN",
+                            IsDefault = false,
+                            Name = "English"
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.Order", b =>
@@ -267,17 +356,15 @@ namespace FShop.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<decimal>("OriginalPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("SeoAlias")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
                         .ValueGeneratedOnAdd()
@@ -292,6 +379,26 @@ namespace FShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OriginalPrice = 1399000000m,
+                            Price = 1499000000m,
+                            Stock = 0,
+                            ViewCount = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OriginalPrice = 1599000000m,
+                            Price = 1699000000m,
+                            Stock = 0,
+                            ViewCount = 0
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.ProductCart", b =>
@@ -322,6 +429,18 @@ namespace FShop.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductCategories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            CategoryId = 1,
+                            ProductId = 2
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.ProductTranslation", b =>
@@ -375,6 +494,56 @@ namespace FShop.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductTranslations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Nâng tầm thời thượng",
+                            Details = "Mạnh mẽ, bề thế",
+                            LanguageId = "vi-VN",
+                            Name = "VF 9 Eco",
+                            ProductId = 1,
+                            SeoAlias = "vf-9-eco",
+                            SeoDescription = "VF 9 là mẫu xe SUV 7 chỗ hàng đầu của VinFast. Với kiểu dáng tinh tế, công nghệ tiên tiến nhất và sự tỉ mỉ trong từng chi tiết, VF 9 mang đến trải nghiệm đặc biệt cao cấp cho Người sở hữu.",
+                            SeoTitle = "Hạng sang"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Level Uptrendy",
+                            Details = "Strong, imposing",
+                            LanguageId = "en-VN",
+                            Name = "VF 9 Eco",
+                            ProductId = 1,
+                            SeoAlias = "vf-9-eco",
+                            SeoDescription = "VF 9 is VinFast's leading 7-seat SUV. With sophisticated design, the most advanced technology and meticulous attention to detail, VF 9 offers experience especially premium for Owners.",
+                            SeoTitle = "Luxury"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Nâng tầm thời thượng",
+                            Details = "Mạnh mẽ, bề thế",
+                            LanguageId = "vi-VN",
+                            Name = "VF 9 Plus",
+                            ProductId = 2,
+                            SeoAlias = "vf-9-plus",
+                            SeoDescription = "VF 9 là mẫu xe SUV 7 chỗ hàng đầu của VinFast. Với kiểu dáng tinh tế, công nghệ tiên tiến nhất và sự tỉ mỉ trong từng chi tiết, VF 9 mang đến trải nghiệm đặc biệt cao cấp cho Người sở hữu.",
+                            SeoTitle = "Hạng sang"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Level Uptrendy",
+                            Details = "Strong, imposing",
+                            LanguageId = "en-VN",
+                            Name = "VF 9 Plus",
+                            ProductId = 2,
+                            SeoAlias = "vf-9-plus",
+                            SeoDescription = "VF 9 is VinFast's leading 7-seat SUV. With sophisticated design, the most advanced technology and meticulous attention to detail, VF 9 offers experience especially premium for Owners.",
+                            SeoTitle = "Luxury"
+                        });
                 });
 
             modelBuilder.Entity("FShop.Data.Entities.Promotion", b =>
