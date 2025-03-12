@@ -18,5 +18,6 @@ namespace FShop.Data.Entities
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<ProductCart> ProductCarts { get; set; }
         public ICollection<ProductTranslation> ProductTranslations { get; set; }
+        public ICollection<Image> Images { get; set; }
     }
 }
