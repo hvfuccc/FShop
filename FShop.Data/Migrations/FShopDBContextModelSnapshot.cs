@@ -249,48 +249,6 @@ namespace FShop.Data.Migrations
                     b.ToTable("Contacts", (string)null);
                 });
 
-            modelBuilder.Entity("FShop.Data.Entities.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Caption")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("FileSize")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Images", (string)null);
-                });
-
             modelBuilder.Entity("FShop.Data.Entities.Language", b =>
                 {
                     b.Property<string>("Id")
@@ -786,7 +744,7 @@ namespace FShop.Data.Migrations
                         {
                             Id = new Guid("3cd4aae4-8648-4cd3-9ca8-ffd93d7a316d"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e48baa9c-5902-4bc9-9689-58c19970f999",
+                            ConcurrencyStamp = "1acfc960-b236-4ab7-a67c-938aaa41ad7b",
                             Dob = new DateTime(2002, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lmht721@gmail.com",
                             EmailConfirmed = true,
@@ -795,7 +753,7 @@ namespace FShop.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "lmht721@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEO/gj5XgNKD9Jvoqaj5vLcWk0GSrVtejKfgtGKFFcAjpFRo1vr7fhwNbfWqwqlEyDg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP0UqkGQWBlR6RbRiMaBTYv79Y1nIG5pvMNjyiidU43uVBfIwq70EzE2Sasrf3wKXw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -941,17 +899,6 @@ namespace FShop.Data.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("FShop.Data.Entities.Image", b =>
-                {
-                    b.HasOne("FShop.Data.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("FShop.Data.Entities.Order", b =>
                 {
                     b.HasOne("FShop.Data.Entities.User", "User")
@@ -1076,8 +1023,6 @@ namespace FShop.Data.Migrations
 
             modelBuilder.Entity("FShop.Data.Entities.Product", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductCarts");

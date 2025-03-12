@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FShop.Data\FShop.Data.csproj" />
-    <ProjectReference Include="..\FShop.Utilities\FShop.Utilities.csproj" />
-  </ItemGroup>
-
 </Project>
