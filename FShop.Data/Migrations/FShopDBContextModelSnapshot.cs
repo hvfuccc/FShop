@@ -1099,3 +1099,4 @@ namespace FShop.Data.Migrations
         }
     }
 }
+

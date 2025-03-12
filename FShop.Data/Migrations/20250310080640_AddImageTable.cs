@@ -64,3 +64,4 @@ namespace FShop.Data.Migrations
         }
     }
 }
+

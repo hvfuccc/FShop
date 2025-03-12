@@ -56,6 +56,7 @@ namespace FShop.Data.EntityFramework
             modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens").HasKey(x => x.UserId);
 
+
             /*
              Data Seeding
             */

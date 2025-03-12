@@ -20,6 +20,7 @@ namespace FShop.Data.Configurations
             builder.Property(x => x.Caption).HasMaxLength(200).IsRequired();
             builder.Property(x => x.DateCreated).HasDefaultValueSql("GETDATE()");
             builder.HasOne(x => x.Product).WithMany(x => x.Images).HasForeignKey(x => x.ProductId);
+
         }
     }
 }
