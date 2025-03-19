@@ -9,6 +9,7 @@ namespace FShop.Dto.Products.Client
 {
     public class ProductPagingRequest : PagingRequestBase
     {
+        public string LanguageId { get; set; }
         public int? CategoryId { get; set; }
     }
 }

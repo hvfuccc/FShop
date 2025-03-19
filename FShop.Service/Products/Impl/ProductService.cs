@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using FShop.Data.Entities;
 using FShop.Data.EntityFramework;
 using FShop.Dto.Common;
 using FShop.Dto.Products;
@@ -10,7 +11,7 @@ namespace FShop.Service.Products.Impl
 {
     public class ProductService(FShopDBContext _context) : IProductService
     {
-        public async Task<List<ProductViewModel>> GetAll()
+        public async Task<List<ProductViewModel>> GetAll(string languageId)
         {
             try
             {
@@ -18,6 +19,7 @@ namespace FShop.Service.Products.Impl
                             join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                             join pc in _context.ProductCategories on p.Id equals pc.ProductId
                             join c in _context.Categories on pc.CategoryId equals c.Id
+                            where pt.LanguageId == languageId
                             select new { p, pt, pc };
                 var data = await query.Select(x => new ProductViewModel()
                 {
@@ -32,7 +34,8 @@ namespace FShop.Service.Products.Impl
                     Details = x.pt.Details,
                     SeoDescription = x.pt.SeoDescription,
                     SeoAlias = x.pt.SeoAlias,
-                    SeoTitle = x.pt.SeoTitle
+                    SeoTitle = x.pt.SeoTitle,
+                    LanguageId = x.pt.LanguageId
                 }).ToListAsync();
                 return data;
             }
@@ -50,6 +53,7 @@ namespace FShop.Service.Products.Impl
                             join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                             join pc in _context.ProductCategories on p.Id equals pc.ProductId
                             join c in _context.Categories on pc.CategoryId equals c.Id
+                            where pt.LanguageId == request.LanguageId
                             select new { p, pt, pc };
 
                 if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
@@ -71,7 +75,9 @@ namespace FShop.Service.Products.Impl
                         Details = x.pt.Details,
                         SeoDescription = x.pt.SeoDescription,
                         SeoAlias = x.pt.SeoAlias,
-                        SeoTitle = x.pt.SeoTitle
+                        SeoTitle = x.pt.SeoTitle,
+                        LanguageId = x.pt.LanguageId
+
                     }).ToListAsync();
                 var pageResult = new PageResult<ProductViewModel>()
                 {
