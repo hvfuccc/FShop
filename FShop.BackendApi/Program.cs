@@ -1,4 +1,6 @@
 using FShop.Data.EntityFramework;
+using FShop.Service.Images;
+using FShop.Service.Images.Impl;
 using FShop.Service.Products;
 using FShop.Service.Products.Impl;
 using FShop.Utilities.Constants;
@@ -14,6 +16,8 @@ var connectionString = builder.Configuration.GetConnectionString(SystemConstant.
 builder.Services.AddDbContext<FShopDBContext>(option => option.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IAdminProductService, AdminProductService>();
+builder.Services.AddTransient<IStorageService, StorageService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -34,7 +38,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-} else
+}
+else
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
@@ -45,6 +50,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+});
 
 app.UseAuthorization();
 

@@ -22,7 +22,7 @@ namespace FShop.Service.Products.Impl
         {
             try
             {
-                var product = await _context.Products.FindAsync(productId);
+                var product = await _context.Products.FindAsync(productId) ?? throw new FShopException("Không tìm thấy sản phẩm");
                 product.ViewCount += 1;
                 await _context.SaveChangesAsync();
             }
@@ -73,7 +73,8 @@ namespace FShop.Service.Products.Impl
                     };
                 }
                 _context.Products.Add(product);
-                return await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+                return product.Id;
             }
             catch (Exception)
             {
@@ -149,6 +150,36 @@ namespace FShop.Service.Products.Impl
                     Items = data
                 };
                 return pageResult;
+            }
+            catch (Exception)
+            {
+                throw new FShopNotImplementedException();
+            }
+        }
+
+        public async Task<ProductViewModel> GetProductById(int productId, string languageId)
+        {
+            try
+            {
+                var product = await _context.Products.FindAsync(productId);
+                var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
+                var productViewModel = new ProductViewModel()
+                {
+                    Id = product.Id,
+                    Price = product.Price,
+                    OriginalPrice = product.OriginalPrice,
+                    DateCreated = product.DateCreated,
+                    Stock = product.Stock,
+                    ViewCount = product.ViewCount,
+                    Description = productTranslation != null ? productTranslation.Description : null,
+                    Details = productTranslation != null ? productTranslation.Details : null,
+                    Name = productTranslation != null ? productTranslation.Name : null,
+                    LanguageId = productTranslation.LanguageId,
+                    SeoAlias = productTranslation != null ? productTranslation.SeoAlias : null,
+                    SeoDescription = productTranslation != null ? productTranslation.SeoDescription : null,
+                    SeoTitle = productTranslation != null ? productTranslation.SeoTitle : null
+                };
+                return productViewModel;
             }
             catch (Exception)
             {

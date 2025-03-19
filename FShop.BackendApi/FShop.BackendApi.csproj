@@ -18,4 +18,8 @@
     <ProjectReference Include="..\FShop.Utilities\FShop.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user-content\" />
+  </ItemGroup>
+
 </Project>
