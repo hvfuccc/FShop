@@ -1,6 +1,7 @@
 ﻿using FShop.Data.Entities;
 using FShop.Data.EntityFramework;
 using FShop.Dto.Common;
+using FShop.Dto.Images;
 using FShop.Dto.Products;
 using FShop.Dto.Products.Admin;
 using FShop.Service.Images;
@@ -13,9 +14,24 @@ namespace FShop.Service.Products.Impl
 {
     public class AdminProductService(FShopDBContext _context, IStorageService _storageService) : IAdminProductService
     {
-        public Task<int> AddImages(int productId, List<IFormFile> files)
+        public async Task<int> AddImage(int productId, ImageCreateRequest request)
         {
-            throw new NotImplementedException();
+            var productImage = new Image()
+            {
+                Caption = request.Caption,
+                DateCreated = DateTime.Now,
+                IsDefault = request.IsDefault,
+                SortOrder = request.SortOrder,
+                ProductId = productId
+            };
+            if (request.ImageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.ImageFile);
+                productImage.FileSize = request.ImageFile.Length;
+            }
+            _context.Images.Add(productImage);
+            await _context.SaveChangesAsync();
+            return productImage.Id;
         }
 
         public async Task AddViewCount(int productId)
@@ -101,14 +117,27 @@ namespace FShop.Service.Products.Impl
             }
         }
 
-        public Task<int> DeleteImages(int imageId)
+        public async Task<int> DeleteImage(int imageId)
         {
-            throw new NotImplementedException();
+            var productImage = await _context.Images.FindAsync(imageId) ?? throw new FShopException("Không tìm thấy ảnh");
+            _context.Images.Remove(productImage);
+            return await _context.SaveChangesAsync();
         }
 
-        public Task<List<ImageViewModel>> GetAllImages(int productId)
+        public async Task<List<ImageViewModel>> GetAllImages(int productId)
         {
-            throw new NotImplementedException();
+            return await _context.Images.Where(x => x.ProductId == productId)
+                .Select(i => new ImageViewModel()
+                {
+                    Caption = i.Caption,
+                    DateCreated = i.DateCreated,
+                    FileSize = i.FileSize,
+                    Id = i.Id,
+                    ImagePath = i.ImagePath,
+                    IsDefault = i.IsDefault,
+                    ProductId = i.ProductId,
+                    SortOrder = i.SortOrder,
+                }).ToListAsync();
         }
 
         public async Task<PageResult<ProductViewModel>> GetAllPaging(ProductPagingAdminRequest request)
@@ -155,6 +184,23 @@ namespace FShop.Service.Products.Impl
             {
                 throw new FShopNotImplementedException();
             }
+        }
+
+        public async Task<ImageViewModel> GetImageById(int imageId)
+        {
+            var image = await _context.Images.FindAsync(imageId) ?? throw new FShopException("Không tìm thấy ảnh");
+            var viewModel = new ImageViewModel()
+            {
+                Id = image.Id,
+                Caption = image.Caption,
+                DateCreated = image.DateCreated,
+                FileSize = image.FileSize,
+                ImagePath = image.ImagePath,
+                SortOrder = image.SortOrder,
+                IsDefault = image.IsDefault,
+                ProductId = image.ProductId,
+            };
+            return viewModel;
         }
 
         public async Task<ProductViewModel> GetProductById(int productId, string languageId)
@@ -218,9 +264,16 @@ namespace FShop.Service.Products.Impl
             }
         }
 
-        public Task<int> UpdateImages(int imageId, string caption, bool isDefault)
+        public async Task<int> UpdateImage(int imageId, ImageUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var productImage = await _context.Images.FindAsync(imageId) ?? throw new FShopException("Không tìm thấy ảnh như yêu cầu");
+            if (request.ImageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.ImageFile);
+                productImage.FileSize = request.ImageFile.Length;
+            }
+            _context.Images.Update(productImage);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<bool> UpdatePrice(int productId, decimal newPrice, decimal newOriginalPrice)
@@ -251,6 +304,7 @@ namespace FShop.Service.Products.Impl
                 throw new FShopNotImplementedException();
             }
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');

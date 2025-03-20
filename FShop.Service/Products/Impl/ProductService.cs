@@ -11,7 +11,7 @@ namespace FShop.Service.Products.Impl
 {
     public class ProductService(FShopDBContext _context) : IProductService
     {
-        public async Task<List<ProductViewModel>> GetAll(string languageId)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, ProductPagingRequest request)
         {
             try
             {
@@ -20,40 +20,6 @@ namespace FShop.Service.Products.Impl
                             join pc in _context.ProductCategories on p.Id equals pc.ProductId
                             join c in _context.Categories on pc.CategoryId equals c.Id
                             where pt.LanguageId == languageId
-                            select new { p, pt, pc };
-                var data = await query.Select(x => new ProductViewModel()
-                {
-                    Id = x.p.Id,
-                    Price = x.p.Price,
-                    OriginalPrice = x.p.OriginalPrice,
-                    Stock = x.p.Stock,
-                    ViewCount = x.p.ViewCount,
-                    DateCreated = x.p.DateCreated,
-                    Name = x.pt.Name,
-                    Description = x.pt.Description,
-                    Details = x.pt.Details,
-                    SeoDescription = x.pt.SeoDescription,
-                    SeoAlias = x.pt.SeoAlias,
-                    SeoTitle = x.pt.SeoTitle,
-                    LanguageId = x.pt.LanguageId
-                }).ToListAsync();
-                return data;
-            }
-            catch
-            {
-                throw new FShopNotImplementedException();
-            }
-        }
-
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(ProductPagingRequest request)
-        {
-            try
-            {
-                var query = from p in _context.Products
-                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                            join pc in _context.ProductCategories on p.Id equals pc.ProductId
-                            join c in _context.Categories on pc.CategoryId equals c.Id
-                            where pt.LanguageId == request.LanguageId
                             select new { p, pt, pc };
 
                 if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
