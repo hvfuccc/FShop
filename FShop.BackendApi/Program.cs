@@ -1,9 +1,13 @@
+using FShop.Data.Entities;
 using FShop.Data.EntityFramework;
 using FShop.Service.Images;
 using FShop.Service.Images.Impl;
 using FShop.Service.Products;
 using FShop.Service.Products.Impl;
+using FShop.Service.Users;
+using FShop.Service.Users.Impl;
 using FShop.Utilities.Constants;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -13,11 +17,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString(SystemConstant.ConnectionString);
-builder.Services.AddDbContext<FShopDBContext>(option => option.UseSqlServer(connectionString));
+builder.Services.AddDbContext<FShopDBContext>(option =>
+                        option.UseSqlServer(connectionString));
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<FShopDBContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IAdminProductService, AdminProductService>();
 builder.Services.AddTransient<IStorageService, StorageService>();
+builder.Services.AddTransient<UserManager<User>, UserManager<User>>();
+builder.Services.AddTransient<SignInManager<User>, SignInManager<User>>();
+builder.Services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -66,6 +78,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
