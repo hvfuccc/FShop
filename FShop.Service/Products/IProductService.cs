@@ -6,7 +6,6 @@ namespace FShop.Service.Products
 {
     public interface IProductService
     {
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(ProductPagingRequest request);
-        Task<List<ProductViewModel>> GetAll(string languageId);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, ProductPagingRequest request);
     }
 }
