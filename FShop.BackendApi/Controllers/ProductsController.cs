@@ -3,12 +3,14 @@ using FShop.Dto.Products.Admin;
 using FShop.Dto.Products.Client;
 using FShop.Service.Products;
 using FShop.Utilities.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FShop.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController(IProductService _productService, IAdminProductService _adminProductService) : ControllerBase
     {
         [HttpGet("{languageId}")]
