@@ -24,12 +24,12 @@ namespace FShop.Service.Users.Impl
                 new Claim(ClaimTypes.GivenName, user.Firstname),
                 new Claim(ClaimTypes.Role, string.Join(";", roles))
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Tokens:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(config["Token:Issuer"],
-                config["Token:Issuer"],
+            var token = new JwtSecurityToken(config["Tokens:Issuer"],
+                config["Tokens:Audience"],
                 claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(Convert.ToInt32(config["Tokens:TokenValidityMins"])),
                 signingCredentials: creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
